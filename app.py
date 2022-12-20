@@ -43,7 +43,7 @@ def get_nft_owner(address, token_id):
 
 st.title('JPEG to NFT # Finder')
 
-nft_collections = ['Azuki', 'Moonbirds', 'Doodles', 'BAYC', 'WoW', 'CloneX', 'MAYC', 'Cool Cats', 'Pudgy Penguins', 'CryptoPunks']
+nft_collections = ['Azuki', 'Moonbirds', 'Doodles', 'BAYC', 'WoW', 'CloneX', 'MAYC', 'Cool Cats', 'Pudgy Penguins', 'CryptoPunks', 'Meebits']
 
 selected_collection = st.selectbox('Select Collection', nft_collections)
 
