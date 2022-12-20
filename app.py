@@ -547,3 +547,53 @@ if selected_collection == 'CryptoPunks':
                             st.subheader("Check [Rarity Score](%s)" % rarity_link)
 
                         st.subheader(f"Owner : [{owner}]({owner_link})")
+
+
+if selected_collection == 'Meebits':
+    filenames_meebit = os.listdir('Meebits')
+
+    if uploaded_img is not None:
+
+        if save_uploaded_image(uploaded_img):
+            display_img = Image.open(uploaded_img)
+
+            col1, col2 = st.columns(2)
+            with col1:
+                st.image(display_img, width=200)
+
+            img1 = cv2.imread(os.path.join('Uploads', uploaded_img.name), 0)
+            resized_img = resize(img1, (192, 128), anti_aliasing=True, preserve_range=True)
+
+            name_scores = []
+            scores = []
+
+            for name in filenames_meebit:
+                img = cv2.imread(os.path.join('Meebits', name), 0)
+                ssim = structural_sim(img, resized_img)
+
+                name_score = (name, ssim)
+                scores.append(ssim)
+
+                name_scores.append(name_score)
+
+            max_score = max(scores)
+            if max_score < 0.8:
+                st.subheader('Please upload a better quality image!')
+            else:
+                for i in range(len(filenames_meebit)):
+                    if name_scores[i][1] == max_score:
+                        final_nft = name_scores[i][0][:-4]
+                        nft_num = name_scores[i][0].split('#')[1].split('.')[0]
+
+                        opensea_link = f'https://opensea.io/assets/ethereum/0x7bd29408f11d2bfc23c34f18275bbf23bb716bc7/{nft_num}'
+                        rarity_link = f'https://rarity.tools/meebits/view/{nft_num}'
+                        owner = get_nft_owner('0x7bd29408f11d2bfc23c34f18275bbf23bb716bc7', nft_num)
+                        owner_link = f'https://opensea.io/{owner}'
+
+                        with col1:
+                            st.subheader(final_nft)
+                        with col2:
+                            st.subheader("Check on [Opensea](%s)" % opensea_link)
+                            st.subheader("Check [Rarity Score](%s)" % rarity_link)
+
+                        st.subheader(f"Owner : [{owner}]({owner_link})")
